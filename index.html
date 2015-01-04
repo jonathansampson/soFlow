@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="soflow">
+	<head>
+		<title>soFlow</title>
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+		<style>
+			body {
+				padding-top: 1em;
+			}
+		</style>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<!-- angular -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+		<script src="scripts/scripts.js"></script>
+	</head>
+	<body ng-controller="main">
+
+		<div class="container">
+
+			<section class="col-md-4" ng-repeat="employee in staff | orderBy : employee.last_access_date">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>{{ employee.display_name }}</strong> | {{ employee.reputation | number }}</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4">
+								<img src="{{ employee.profile_image }}" class="img-responsive img-rounded">
+							</div>
+							<div class="col-md-8">
+								<p>Recent Accepted Answers</p>
+								<div class="progress">
+									<div class="progress-bar" style="width: 60%;">60%</div>
+								</div>
+								<p>Recently Active In:</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+	</body>
+</html>
