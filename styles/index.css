@@ -1,0 +1,35 @@
+body {
+	padding-top: 1em;
+}
+img {
+	max-width: 100%;
+	margin-bottom: 1em;
+	border-radius: 50%;
+}
+.list-group-item {
+	padding-left: 3em;
+}
+.list-group-item img {
+	width: 16px;
+	position: absolute;
+	top: 1em; left: 1em;
+}
+.panel-heading .badge {
+	float: right;
+}
+
+.panel {
+	min-height: 245px;
+}
+
+.progress-bar {
+	min-width: 2em;
+}
+
+.chart-container {
+	padding: 2em 0;
+	border: 1px solid #f1f1f1;
+}
+.summary {
+	font-size: .85em;
+}

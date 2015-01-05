@@ -2,6 +2,7 @@ var pattern = /{(\w+)}/g,
 	template = "{protocol}://{address}/{version}/",
 	configuration = {
 		"version": 2.2,
+		"pagesize": 100,
 		"protocol": "http",
 		"site": "stackoverflow",
 		/* stackapps.com/apps/oauth */

@@ -1,91 +1,111 @@
 var fsys = require( "fs" ),
 	stackoverflow = require( "./stackoverflow" );
 
-var ids = [ 54680, 530681, 788998, 2574883, 3587191 ],
-	tagnames = [ "internet-explorer" ];
+var ids = [ 54680, 530681, 788998, 2574883, 3587191, 949365, 3203524 ],
+	tagnames = [ "internet-explorer" ],
+	monthAgo = Math.floor( Date.now() * .001 - 2592000 );
+
+	ids.push( 126229, 3538158 );
 
 /* IE 6 through 11 */
 
 for ( var i = 6; i < 12; i++ )
 	tagnames.push( "internet-explorer-" + i );
 
-/* Users */
-
 stackoverflow.users.getInfo(
 	{ filter: "!LnNkvqp9u-aTwPWz1ZvckY" }, ids, function ( json ) {
 		fsys.writeFile(
-			"./data/staff.json",
-			JSON.stringify( json.items, null, "\t" )
+			"./data/users.json",
+			JSON.stringify( json.items )
 		);
 	});
 
 stackoverflow.users.getComments(
-	{ filter: "!9YdnSNNBB" }, ids, function ( json ) {
+	{ fromdate: monthAgo, filter: "!9YdnSNNBB" }, ids, function ( json ) {
 		fsys.writeFile(
-			"./data/comments.json",
-			JSON.stringify( json.items, null, "\t" )
+			"./data/users.comments.json",
+			JSON.stringify( json.items )
 		);
 	});
 
 stackoverflow.users.getAnswers(
-	{ filter: "!.FjwPGDVPvKrXz2PZAw-beudQI.hK" }, ids, function ( json ) {
+	{ fromdate: monthAgo, filter: "!SWKA(oRGwuxDpoZRYM" }, ids, function ( json ) {
 		fsys.writeFile(
-			"./data/answers.json",
-			JSON.stringify( json.items, null, "\t" )
+			"./data/users.answers.json",
+			JSON.stringify( json.items )
 		);
 	});
 
 stackoverflow.users.getReputationHistory(
-	{ filter: "!-.i.zYwWy0CU" }, ids, function ( json ) {
+	{ fromdate: monthAgo, filter: "!-.i.zYwWy0CU" }, ids, function ( json ) {
 		fsys.writeFile(
-			"./data/reputationHistory.json",
-			JSON.stringify( json.items, null, "\t" )
+			"./data/users.reputation-history.json",
+			JSON.stringify( json.items )
 		);
 	});
 
 stackoverflow.users.getRecentlyActiveTags(
-	{ filter: "!9f2VD2yfM" }, ids, function ( json ) {
+	{ fromdate: monthAgo, filter: "!9f2VD2yfM" }, ids, function ( json ) {
 		fsys.writeFile(
 			"./data/users.tags.json",
-			JSON.stringify( json.items, null, "\t" )
+			JSON.stringify( json.items )
 		);
 	});
 
-stackoverflow.users.getTopAnswerTags(
-	{}, 54680, function ( json ) {
-		fsys.writeFile(
-			"./data/users.54680.top-answer-tags.json",
-			JSON.stringify( json.items, null, "\t" )
-		);
-	});
-
-/* Tags */
+// stackoverflow.users.getTopAnswerTags(
+// 	{ fromdate: monthAgo }, 54680, function ( json ) {
+// 		fsys.writeFile(
+// 			"./data/users.54680.top-answer-tags.json",
+// 			JSON.stringify( json.items )
+// 		);
+// 	});
 
 stackoverflow.tags.getInfo(
-	{ filter: "!-.G.68phH_FI" }, tagnames, function ( json ) {
+	{ fromdate: monthAgo, filter: "!-.G.68phH_FI" }, tagnames, function ( json ) {
 		fsys.writeFile(
 			"./data/tags.json",
-			JSON.stringify( json.items, null, "\t" )
+			JSON.stringify( json.items )
 		);
 	});
 
-tagnames.forEach(function ( tagname ) {
+
+var global = [];
+
+tagnames.forEach(function ( tagname, index, array ) {
 	stackoverflow.tags.getTopAnswerers(
-		{ filter: "!)Q2B_A7.Dok)xCMc6u6FrecY" }, tagname, "month", function ( json ) {
-			fsys.writeFile(
-				"./data/" + tagname + ".json",
-				JSON.stringify( json.items, null, "\t" )
-			);
+		{ filter: "!6JEiT(2F_W87n" }, tagname, "month", function ( json ) {
+
+			global.push( json.items );
+
+			// Simple check to see if all tag data has been recovered
+			if ( global.length === array.length ) {
+				global = global.reduce(function ( previous, current ) {
+					current.forEach(function ( entry ) {
+						for ( var i = 0; i < previous.length; i++ ) {
+							if ( previous[i].user.user_id === entry.user.user_id ) {
+								previous[i].score += entry.score;
+								previous[i].post_count += entry.post_count;
+								return;
+							}
+						}
+						previous.push( entry );
+					});
+					return previous;
+				}, []);
+
+				fsys.writeFile(
+					"./data/tags.top-answerers.month.json",
+					JSON.stringify( global )
+				);
+			}
 		});
 });
 
-/* Questions */
-
 stackoverflow.questions.awaitingAnswers(
-	{ tagged: "internet-explorer", 
-	  filter: "!gB4j)jX-VQazvs1gYGzwD(UW)e4hgXgiw66" }, function ( json ) {
+	{ fromdate: monthAgo,
+	  tagged: "internet-explorer" }, function ( json ) {
 		fsys.writeFile(
-			"./data/awaitingAnswers.json",
-			JSON.stringify( json.items, null, "\t" )
+			"./data/questions.no-answers.json",
+			JSON.stringify( json.items )
 		);
 	});
