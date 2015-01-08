@@ -20,22 +20,22 @@
 			<div class="row">
 
 				<div class="col-md-3">
-					<h4>Top Tag Activity</h4>
 					<ul class="list-group">
 						<li class="list-group-item" ng-repeat="answerer in topAnswerers | limitTo: 7">
 							<img src="{{ answerer.user.profile_image }}">
-							<a href="{{ answerer.user.link }}" ng-bind-html="answerer.user.display_name"></a> 
+							<a href="http://stackoverflow.com/users/{{ answerer.user_id }}" ng-bind-html="answerer.user.display_name"></a> 
 							has posted {{ answerer.post_count | oneOrMany: "time" }}, and earned {{ answerer.score }} points.
 						</li>
 					</ul>
 					<canvas class="chart chart-doughnut" data="data" labels="labels"></canvas>
 				</div>
+
 				<div class="col-md-9">
-					<h4>Recent Account Summaries (last 30 days)</h4>
-					<section class="col-md-4" ng-repeat="user in users">
+					<section class="col-md-6" ng-repeat="user in users">
 						<div class="panel panel-info">
 							<div class="panel-heading">
-								{{ user.display_name }} <span class="badge">{{ user.reputation | number }}</span>
+								<a href="http://stackoverflow.com/users/{{ user.user_id }}" ng-bind-html="user.display_name"></a> 
+								<span class="badge">{{ user.reputation | number }}</span>
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -44,16 +44,18 @@
 									</figure>
 									<p class="col-md-8 summary">
 										<span ng-if="( user.answers = ( answers | owned: user.user_id ) ).length">
-											{{ user.firstname }} has posted {{ user.answers.length | oneOrMany: "answer" }}.
+											<span ng-bind-html="user.firstname"></span> has posted {{ user.answers.length | oneOrMany: "answer" }}.
 											<span ng-if="( user.answers.accepted = ( user.answers | accepted: true ) ).length">
 												Of these, {{ user.answers.accepted.length | one }} {{ user.answers.accepted.length > 1 ? "were" : "was" }} <em>accepted</em>.
 											</span>
 										</span>
 										<span ng-if="( user.comments = ( comments | owned: user.user_id ) ).length">
-											{{ user.firstname }} {{ user.answers.length ? "also" : "" }} posted {{ user.comments.length | oneOrMany: "comment" }}.
+											<span ng-bind-html="user.firstname"></span> 
+											{{ user.answers.length ? "also" : "" }} recently posted 
+											{{ user.comments.length | oneOrMany: "comment" }}.
 										</span>
 										<span ng-if="!user.answers.length && !user.comments.length">
-											{{ user.display_name }} does not currently have any recent activity to share.
+											<span ng-bind-html="user.display_name"></span> does not currently have any recent activity to share.
 										</span>
 									</p>
 								</div>

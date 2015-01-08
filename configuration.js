@@ -6,7 +6,7 @@ var pattern = /{(\w+)}/g,
 		"protocol": "http",
 		"site": "stackoverflow",
 		/* stackapps.com/apps/oauth */
-		"key": "",
+		"key": "7EI*9EMH6MhHSXHZFVV6jA((",
 		"address": "api.stackexchange.com"
 	};
 

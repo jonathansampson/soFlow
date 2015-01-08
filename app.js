@@ -1,7 +1,7 @@
 var fsys = require( "fs" ),
 	stackoverflow = require( "./stackoverflow" );
 
-var ids = [ 54680, 530681, 788998, 2574883, 3587191, 949365, 3203524 ],
+var ids = [ 54680, 530681, 2574883, 3587191, 3203524, 414145 ],
 	tagnames = [ "internet-explorer" ],
 	monthAgo = Math.floor( Date.now() * .001 - 2592000 );
 
@@ -10,7 +10,7 @@ var ids = [ 54680, 530681, 788998, 2574883, 3587191, 949365, 3203524 ],
 /* IE 6 through 11 */
 
 for ( var i = 6; i < 12; i++ )
-	tagnames.push( "internet-explorer-" + i );
+	//tagnames.push( "internet-explorer-" + i );
 
 stackoverflow.users.getInfo(
 	{ filter: "!LnNkvqp9u-aTwPWz1ZvckY" }, ids, function ( json ) {
@@ -68,6 +68,21 @@ stackoverflow.tags.getInfo(
 		);
 	});
 
+
+/*
+	There's a problem with this next operation that may inflate
+	actual user interaction on the site. If a question is tagged 
+	[internet-explorer] and [internet-explorer-11], a user who 
+	answers it will receive a single set of upvotes. However, both 
+	tags will list that user has having one those points.
+
+	Upon merging the data from both tags, we may mistakenly count
+	the single votes from both locations as unique votes, and thus
+	merge them. This can inflate the record of how many answers
+	were given, as well as how many points were awarded.
+
+	For now we will only query [internet-explorer]
+*/
 
 var global = [];
 

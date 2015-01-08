@@ -75,7 +75,8 @@
 				 		return a.last_access_date > b.last_access_date ? -1 : 1;
 				 	});
 				 	data.forEach(function ( user ) {
-				 		user.firstname = user.display_name.split(" ")[0];
+				 		user.firstname = $sce.trustAsHtml( user.display_name.split(" ")[0] );
+				 		user.display_name = $sce.trustAsHtml( user.display_name );
 				 	});
 				 	$scope.users = data;
 				 });

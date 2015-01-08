@@ -19,7 +19,7 @@ img {
 }
 
 .panel {
-	min-height: 245px;
+	min-height: 265px;
 }
 
 .progress-bar {
@@ -29,7 +29,4 @@ img {
 .chart-container {
 	padding: 2em 0;
 	border: 1px solid #f1f1f1;
-}
-.summary {
-	font-size: .85em;
 }
